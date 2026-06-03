@@ -75,10 +75,10 @@ export default function CreateURL() {
           {created.qr_code && (
             <div className="mb-4">
               <p className="text-muted small mb-2">QR Code</p>
-              <img src={`http://localhost:8000${created.qr_code}`} alt="QR"
+              <img src={`http://10.54.228.196:8000${created.qr_code}`} alt="QR"
                 style={{ width:180, background:'white', padding:8, borderRadius:8 }} />
               <div className="mt-2">
-                <a href={`http://localhost:8000${created.qr_code}`} download
+                <a href={`http://10.54.228.196:8000${created.qr_code}`} download
                   className="btn btn-sm btn-outline-success">⬇ Download QR</a>
               </div>
             </div>

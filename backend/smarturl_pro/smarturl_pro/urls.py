@@ -18,9 +18,19 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import JsonResponse
 from urls_app.views import RedirectView
 
+
+def api_root(request):
+    return JsonResponse({
+        'message': 'SmartURL backend is running.',
+        'frontend': settings.FRONTEND_BASE_URL,
+        'api': f'{settings.BACKEND_BASE_URL}/api/',
+    })
+
 urlpatterns = [
+    path('', api_root, name='api-root'),
     path('admin/', admin.site.urls),
     path('api/auth/', include('accounts.urls')),
     path('api/', include('urls_app.urls')),

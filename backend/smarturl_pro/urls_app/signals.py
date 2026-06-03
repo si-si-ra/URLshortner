@@ -3,6 +3,7 @@
 import qrcode
 from io import BytesIO
 from django.core.files import File
+from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import ShortURL
@@ -13,7 +14,7 @@ def generate_qr_code(sender, instance, created, **kwargs):
     if not created or instance.qr_code:
         return
 
-    short_url = f"http://localhost:8000/s/{instance.get_active_code()}"
+    short_url = f"{settings.FRONTEND_BASE_URL}/s/{instance.get_active_code()}"
 
     qr = qrcode.QRCode(
         version=1,

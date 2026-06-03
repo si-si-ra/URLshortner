@@ -2,6 +2,7 @@
 
 import re
 from rest_framework import serializers
+from django.conf import settings
 from django.utils import timezone
 from .models import Tag, ShortURL, ClickAnalytics
 
@@ -23,7 +24,7 @@ class ShortURLSerializer(serializers.ModelSerializer):
         return obj.get_active_code()
 
     def get_short_url(self, obj):
-        return f"http://localhost:8000/s/{obj.get_active_code()}"
+        return f"{settings.FRONTEND_BASE_URL}/s/{obj.get_active_code()}"
 
     class Meta:
         model  = ShortURL

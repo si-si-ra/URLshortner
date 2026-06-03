@@ -16,7 +16,7 @@ export default function Redirect() {
 
   const checkStatus = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/urls/status/${code}/`)
+      const res = await axios.get(`http://10.54.228.196:8000/api/urls/status/${code}/`)
       if (res.data.status === 'ok') {
         doRedirect()
       } else {
@@ -33,7 +33,7 @@ export default function Redirect() {
 
   const doRedirect = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/s/${code}/`)
+      const res = await axios.get(`http://10.54.228.196:8000/s/${code}/`)
       window.location.href = res.data.original_url
     } catch {
       setStatus('error')
@@ -46,7 +46,7 @@ export default function Redirect() {
     setPwError('')
     try {
       const res = await axios.post(
-        `http://localhost:8000/api/urls/verify/${code}/`,
+        `http://10.54.228.196:8000/api/urls/verify/${code}/`,
         { password }
       )
       window.location.href = res.data.original_url

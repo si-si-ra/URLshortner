@@ -56,7 +56,7 @@ export default function Analytics() {
               </div>
               {url.qr_code && (
                 <div className="col-md-4 text-center mt-3 mt-md-0">
-                  <img src={`http://localhost:8000${url.qr_code}`} alt="QR"
+                  <img src={`http://10.54.228.196:8000${url.qr_code}`} alt="QR"
                     style={{ width:120, background:'white', padding:8, borderRadius:8 }} />
                 </div>
               )}

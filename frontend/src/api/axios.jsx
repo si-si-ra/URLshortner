@@ -3,7 +3,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'http://127.0.0.1:8000/api',
 })
 
 api.interceptors.request.use(
@@ -24,7 +24,7 @@ api.interceptors.response.use(
       try {
         const refresh  = localStorage.getItem('refresh_token')
         const response = await axios.post(
-          'http://localhost:8000/api/auth/token/refresh/',
+          `${api.defaults.baseURL}/auth/token/refresh/`,
           { refresh }
         )
         const newToken = response.data.access

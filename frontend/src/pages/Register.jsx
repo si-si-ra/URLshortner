@@ -12,18 +12,56 @@ export default function Register() {
   const { register } = useAuth()
   const navigate = useNavigate()
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value })
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+    if (errors[e.target.name] || errors.general) {
+      setErrors({ ...errors, [e.target.name]: null, general: null })
+    }
+  }
+
+  const validateForm = () => {
+    const nextErrors = {}
+    const username = form.username.trim()
+    const email = form.email.trim()
+
+    if (!username) nextErrors.username = ['Username is required.']
+    else if (username.length < 3) nextErrors.username = ['Username must be at least 3 characters long.']
+
+    if (!email) nextErrors.email = ['Email address is required.']
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      nextErrors.email = ['Enter a valid email address.']
+    }
+
+    if (!form.password) nextErrors.password = ['Password is required.']
+    else if (form.password.length < 8) nextErrors.password = ['Password must be at least 8 characters long.']
+
+    if (!form.password2) nextErrors.password2 = ['Please confirm your password.']
+    else if (form.password !== form.password2) nextErrors.password2 = ['Passwords do not match.']
+
+    return nextErrors
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    const validationErrors = validateForm()
+    if (Object.keys(validationErrors).length) {
+      setErrors(validationErrors)
+      return
+    }
     setLoading(true)
     setErrors({})
     try {
-      await register(form.username, form.email, form.password, form.password2)
+      await register(form.username.trim(), form.email.trim(), form.password, form.password2)
       setSuccess(true)
       setTimeout(() => navigate('/login'), 2000)
     } catch (err) {
-      setErrors(err.response?.data || {})
+      if (err.response?.data) {
+        setErrors(err.response.data)
+      } else {
+        setErrors({
+          general: ['Could not reach the backend. Check that Django is running on port 8000.']
+        })
+      }
     } finally {
       setLoading(false)
     }
@@ -32,7 +70,31 @@ export default function Register() {
   const fieldError = (field) => {
     const e = errors[field]
     if (!e) return null
-    return <div className="text-danger small mt-1">{Array.isArray(e) ? e[0] : e}</div>
+    const messages = Array.isArray(e) ? e : [e]
+    return (
+      <div className="text-danger small mt-1">
+        {messages.map((message, index) => (
+          <div key={`${field}-${index}`}>{String(message)}</div>
+        ))}
+      </div>
+    )
+  }
+
+  const generalErrors = () => {
+    const messages = [
+      ...(errors.general || []),
+      ...(errors.non_field_errors || []),
+      ...(errors.detail ? [errors.detail] : []),
+      ...(errors.error ? [errors.error] : []),
+    ]
+    if (!messages.length) return null
+    return (
+      <div className="alert alert-danger">
+        {messages.map((message, index) => (
+          <div key={`general-${index}`}>{String(message)}</div>
+        ))}
+      </div>
+    )
   }
 
   return (
@@ -44,7 +106,7 @@ export default function Register() {
             <p className="text-muted">Join SmartURL Pro today</p>
           </div>
           {success && <div className="alert alert-success">✅ Account created! Redirecting...</div>}
-          {errors.non_field_errors && <div className="alert alert-danger">{errors.non_field_errors[0]}</div>}
+          {generalErrors()}
           <form onSubmit={handleSubmit}>
             {[
               { name:'username',  label:'Username',         type:'text' },
