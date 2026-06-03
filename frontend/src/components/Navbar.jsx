@@ -1,0 +1,54 @@
+// src/components/Navbar.jsx
+
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+
+export default function Navbar() {
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    await logout()
+    navigate('/login')
+  }
+
+  if (!user) return null
+
+  return (
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow">
+      <Link className="navbar-brand fw-bold text-primary fs-4" to="/dashboard">
+        ⚡ SmartURL Pro
+      </Link>
+      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span className="navbar-toggler-icon" />
+      </button>
+      <div className="collapse navbar-collapse" id="nav">
+        <ul className="navbar-nav me-auto">
+          <li className="nav-item">
+            <Link className="nav-link" to="/dashboard">📊 Dashboard</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/create">➕ Create URL</Link>
+          </li>
+        </ul>
+        <ul className="navbar-nav">
+          <li className="nav-item dropdown">
+            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              👤 {user.username}
+            </a>
+            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+              <li><span className="dropdown-item-text text-muted small">{user.email}</span></li>
+              <li><hr className="dropdown-divider" /></li>
+              <li>
+                <button className="dropdown-item text-danger" onClick={handleLogout}>
+                  🚪 Logout
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  )
+}
