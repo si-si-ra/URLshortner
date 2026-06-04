@@ -26,7 +26,13 @@ export default function Navbar() {
       <div className="collapse navbar-collapse" id="nav">
         <ul className="navbar-nav ms-auto">
           <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            <a className="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+              <span
+                className="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center me-2"
+                style={{ width: 32, height: 32, fontSize: 14 }}
+              >
+                {user && user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+              </span>
               {user.username}
             </a>
             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-dark">
