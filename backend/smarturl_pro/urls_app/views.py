@@ -191,7 +191,10 @@ class RedirectView(IPAddressMixin, APIView):
         url.click_count += 1
         url.last_clicked_at = timezone.now()
         url.save(update_fields=['click_count', 'last_clicked_at'])
-        return Response({"original_url": url.original_url})
+        if request.query_params.get('format') == 'json':
+            return Response({"original_url": url.original_url})
+        from django.shortcuts import redirect
+        return redirect(url.original_url)
 
 
 # ── Password Verify ─────────────────────────────────────────────

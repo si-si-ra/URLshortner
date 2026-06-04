@@ -2,8 +2,15 @@
 
 import axios from 'axios'
 
+export const getBackendBaseUrl = () => {
+  const defaultHost = `${window.location.protocol}//${window.location.hostname}:8000`
+  return (import.meta.env.VITE_BACKEND_URL || defaultHost).replace(/\/$/, '')
+}
+
+export const backendBaseUrl = getBackendBaseUrl()
+
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: `${backendBaseUrl}/api`,
 })
 
 api.interceptors.request.use(

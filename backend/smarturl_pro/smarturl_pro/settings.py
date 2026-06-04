@@ -27,10 +27,13 @@ SECRET_KEY = 'django-insecure-#--=e&xyvb&vwe94a^f3)5wp#6j_5@al4=!lv!*6b^8rh#d(e^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.54.228.196']
+ALLOWED_HOSTS = os.environ.get(
+    'DJANGO_ALLOWED_HOSTS',
+    'localhost,127.0.0.1,10.54.228.196'
+).split(',')
 
-FRONTEND_BASE_URL = 'http://10.54.228.196:3000'
-BACKEND_BASE_URL = 'http://10.54.228.196:8000'
+FRONTEND_BASE_URL = os.environ.get('FRONTEND_BASE_URL', 'http://10.54.228.196:3000').rstrip('/')
+BACKEND_BASE_URL = os.environ.get('BACKEND_BASE_URL', 'http://10.54.228.196:8000').rstrip('/')
 
 
 # Application definition
